@@ -12,7 +12,7 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    /* ===== Theme: โทนสีตามโปสเตอร์ + สี Symposium ===== */
+    /* โทนสี: เฮดเดอร์ชมพูหวาน + สี Symposium ใกล้โปสเตอร์ */
     tailwind.config = {
       safelist: [
         'bg-s1-light','bg-s1-mid','bg-s1-strong','border-s1-mid','text-s1-strong',
@@ -24,105 +24,44 @@
           fontFamily: {
             sans: ['Manrope','Noto Sans Thai','ui-sans-serif','system-ui','-apple-system','Segoe UI','Roboto','Helvetica','Arial']
           },
-          /* เฮดเดอร์ชมพูหวานใกล้โทนโปสเตอร์ */
           colors: {
-            hero: { from:'#D65A92', to:'#F5A3C5' },
-            brand:{50:'#fdf2f8',100:'#fce7f3',200:'#fbcfe8',300:'#f9a8d4',400:'#f472b6',500:'#ec4899'},
-            /* Symposium palettes (pastel) */
-            s1:{ light:'#FBE5EF', mid:'#F6C7DB', strong:'#D55490' },  /* Rose/Pink */
-            s2:{ light:'#F3F6EA', mid:'#E4ECD3', strong:'#7C8E3B' },  /* Olive */
-            s3:{ light:'#F1ECFB', mid:'#E3D9F8', strong:'#6B5CA5' }   /* Lavender */
+            hero: { from:'#D65A92', to:'#F5A3C5' },                 /* header gradient */
+            s1: { light:'#FBE5EF', mid:'#F6C7DB', strong:'#D55490' }, /* Symposium I (rose) */
+            s2: { light:'#F3F6EA', mid:'#E4ECD3', strong:'#7C8E3B' }, /* Symposium II (olive) */
+            s3: { light:'#F1ECFB', mid:'#E3D9F8', strong:'#6B5CA5' }, /* Symposium III (lavender) */
           },
           boxShadow:{ soft:'0 8px 24px -12px rgba(100,16,60,.22)' }
         }
       }
-    }
-  
-  function driveURLVariants(input="") {
-  const id = extractDriveId(input);
-  if (!id) return [input]; // ถ้าไม่ใช่ Drive ให้คืนค่าเดิม (เป็น URL ตรง)
-  return [
-    `https://drive.google.com/uc?export=view&id=${id}`,          // ปกติ
-    `https://drive.google.com/thumbnail?id=${id}&sz=w512`,        // ทางสำรอง
-    // รูปแบบภาพเสิร์ฟโดย Googleusercontent (บางกรณีใช้ได้)
-    `https://drive.google.com/uc?export=download&id=${id}`
-  ];
-}
-
-// เรียกเมื่อโหลดภาพล้มเหลว: ลองตัวเลือกถัดไป
-function imgFallback(img) {
-  const list = (img.dataset.fallback || "").split("|").filter(Boolean);
-  if (list.length) {
-    img.src = list.shift();
-    img.dataset.fallback = list.join("|");
-  } else {
-    // สุดท้ายแล้ว: ซ่อนรูป โชว์ initials
-    img.style.display = "none";
-    if (img.nextElementSibling) img.nextElementSibling.style.display = "grid";
-  }
-}
-window.imgFallback = imgFallback; // ให้ onerror เรียกใช้ได้
-
-function speakerItem(sp, i, idx){
-  const initials = (sp.name||"")
-    .trim().split(/\s+/).map(x=>x[0]?.toUpperCase()||"").slice(0,2).join("");
-  const variants = driveURLVariants(sp.photo || "");
-  const [first, ...rest] = variants;
-  const colorPool = ["bg-pink-500","bg-rose-400","bg-fuchsia-400","bg-violet-400","bg-pink-400"];
-  const color = colorPool[(idx+i) % colorPool.length];
-
-  return `
-    <li>
-      <a href="#" class="group block px-4 md:px-5 py-2 rounded-xl transition hover:bg-pink-50 hover:shadow focus:bg-pink-50 focus:outline-none">
-        <div class="flex items-center gap-4"> <!-- items-center = จัดกลางแนวตั้ง -->
-          <span class="relative inline-block shrink-0">
-            <img src="${first}" data-fallback="${rest.join('|')}"
-                 alt="${sp.name||''}" loading="lazy"
-                 class="w-20 h-20 md:w-[68px] md:h-[68px] rounded-full object-cover ring-2 ring-pink-200 transition group-hover:ring-pink-300"
-                 onerror="imgFallback(this)" />
-            <span class="w-24 h-24 md:w-[68px] md:h-[68px] rounded-full ${color} text-white text-base font-semibold place-items-center hidden">${initials}</span>
-          </span>
-          <div class="min-w-0">
-            <div class="text-slate-900 font-semibold group-hover:text-pink-700 transition">${sp.name||""}</div>
-            ${sp.title ? `<div class="text-sm text-slate-600">${sp.title}</div>` : ``}
-            ${sp.aff   ? `<div class="text-xs text-slate-500">${sp.aff}</div>`   : ``}
-          </div>
-        </div>
-      </a>
-    </li>
-  `;
-};
+    };
   </script>
-
   <style>
     html,body{font-family: Manrope,"Noto Sans Thai",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial;}
   </style>
 </head>
-<body class="bg-brand-50 text-slate-800 font-sans">
-  <!-- Fireworks (ครั้งแรกที่เปิด) -->
+<body class="bg-pink-50/40 text-slate-800 font-sans">
+  <!-- พลุแตก ครั้งแรก -->
   <canvas id="fx" class="fixed inset-0 pointer-events-none z-50" style="display:none"></canvas>
 
-  <!-- TOP BAR -->
+  <!-- HEADER -->
   <header class="bg-white/80 backdrop-blur border-b">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="h-9 w-9 rounded-lg bg-brand-500 grid place-items-center text-white font-bold">IA</div>
+        <div class="h-9 w-9 rounded-lg bg-pink-500 grid place-items-center text-white font-bold">IA</div>
         <div class="leading-tight">
           <div class="font-semibold">40th International Annual Meeting in Pharmaceutical Sciences (IAMPS40)</div>
           <div class="text-xs text-slate-500">Theme: “Advancing Pharmaceutical Sciences Through a Multidisciplinary Approach”</div>
         </div>
       </div>
-      <a href="#" class="inline-flex items-center px-4 py-2 rounded-full bg-brand-500 text-white font-semibold hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-200 transition">
+      <a href="#" class="inline-flex items-center px-4 py-2 rounded-full bg-pink-500 text-white font-semibold hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-200 transition">
         Register Now
       </a>
     </div>
 
-    <!-- HERO -->
+    <!-- HERO + Day Tabs -->
     <div class="bg-gradient-to-br from-hero-from to-hero-to text-white">
       <div class="max-w-7xl mx-auto px-4 py-10 text-center">
         <h1 class="text-3xl md:text-5xl font-bold tracking-tight">Conference Agenda</h1>
-
-        <!-- Day Tabs -->
         <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
           <button data-day="1" class="day-tab rounded-lg px-4 py-3 bg-white/25 text-white font-semibold shadow-soft hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/60">Day 1 | 13 Nov 2025</button>
           <button data-day="2" class="day-tab rounded-lg px-4 py-3 bg-white/10 text-white/90 border border-white/20 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/40">Day 2 | 14 Nov 2025</button>
@@ -131,27 +70,25 @@ function speakerItem(sp, i, idx){
     </div>
   </header>
 
-  <!-- เว้นระยะจาก HERO เพื่อไม่ให้การ์ดแรกโดนทับ -->
+  <!-- เนื้อหา -->
   <main class="max-w-5xl mx-auto px-4 pt-8 md:pt-10 pb-20">
     <section id="day-container"></section>
   </main>
 
   <footer class="border-t bg-white">
     <div class="max-w-7xl mx-auto px-4 py-8 text-sm text-slate-500">
-      © 2025 IAMPS40 · THAILAND · All rights reserved.
+      © 2025 IAMPS40 · Agenda
     </div>
   </footer>
 
   <script>
-    /* ========= Utilities ========= */
+    /* ===== Utils ===== */
     const $  = (s, r=document)=>r.querySelector(s);
     const $$ = (s, r=document)=>[...r.querySelectorAll(s)];
-    const makeInitials=(name="")=>{const p=name.trim().split(/\s+/);return (p[0]?.[0]||"").toUpperCase()+(p[1]?.[0]||"").toUpperCase();};
-    function driveDirect(u=""){const s=String(u).trim();if(!s)return"";let m=s.match(/drive\.google\.com\/file\/d\/([^/]+)/);if(m)return`https://drive.google.com/uc?export=view&id=${m[1]}`;m=s.match(/drive\.google\.com\/open\?id=([^&]+)/);if(m)return`https://drive.google.com/uc?export=view&id=${m[1]}`;if(/^[\w-]{20,}$/.test(s))return`https://drive.google.com/uc?export=view&id=${s}`;return s;}
-    const avatarPool=["bg-pink-500","bg-rose-400","bg-fuchsia-400","bg-violet-400","bg-pink-400"];
-    const ClockIcon=`<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.75a10.25 10.25 0 1 0 0 20.5 10.25 10.25 0 0 0 0-20.5Zm.75 5.5a.75.75 0 0 0-1.5 0v5.19c0 .2.08.39.22.53l3.36 3.36a.75.75 0 1 0 1.06-1.06l-3.14-3.14V7.25Z"/></svg>`;
+    const initialsOf = n => (n||'').trim().split(/\s+/).map(x=>x[0]||'').slice(0,2).join('').toUpperCase();
+    const ClockIcon = `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.75a10.25 10.25 0 1 0 0 20.5 10.25 10.25 0 0 0 0-20.5Zm.75 5.5a.75.75 0 0 0-1.5 0v5.19c0 .2.08.39.22.53l3.36 3.36a.75.75 0 1 0 1.06-1.06l-3.14-3.14V7.25Z"/></svg>`;
 
-    /* ========= Fireworks (first visit only) ========= */
+    /* พลุแตกโชว์ครั้งเดียว */
     (function fireworksOnce(){
       if(sessionStorage.getItem('fx_shown')) return; sessionStorage.setItem('fx_shown','1');
       const c=document.getElementById('fx'),x=c.getContext('2d'),R=devicePixelRatio||1;
@@ -165,22 +102,22 @@ function speakerItem(sp, i, idx){
         t++; if(t<220||P.length) requestAnimationFrame(loop); else c.style.display='none'; })();
     })();
 
-    /* ========= UI Partials ========= */
-
-    // 1) Speaker item — ปรับ "จัดกลางแนวตั้ง" + avatar ใหญ่ + hover ไม่ชนขอบ
+    /* ====== Speaker item (ไม่มี Google Drive แล้ว) ====== */
     function speakerItem(sp,i,idx){
-      const initials=makeInitials(sp.name||"");
-      const photo=driveDirect(sp.photo||"");
-      const color=avatarPool[(idx+i)%avatarPool.length];
+      const colorPool=["bg-pink-500","bg-rose-400","bg-fuchsia-400","bg-violet-400","bg-pink-400"];
+      const color=colorPool[(idx+i)%colorPool.length];
+      const src = sp.photo ? sp.photo : ''; // ระบุ './images/xxxxx.png' ใน data
+      const init = initialsOf(sp.name);
+
       return `
         <li>
           <a href="#" class="group block px-4 md:px-5 py-2 rounded-xl transition hover:bg-pink-50 hover:shadow focus:bg-pink-50 focus:outline-none">
-            <div class="flex items-center gap-4">  <!-- items-center = จัดกลางแนวตั้ง -->
+            <div class="flex items-center gap-4">
               <span class="relative inline-block shrink-0">
-                <img src="${photo}" alt="${sp.name||''}" loading="lazy"
-                     class="w-20 h-20 md:w-[68px] md:h-[68px] rounded-full object-cover ring-2 ring-pink-200 transition group-hover:ring-pink-300"
+                <img src="${src}" alt="${sp.name||''}" loading="lazy"
+                     class="w-16 h-16 md:w-[68px] md:h-[68px] rounded-full object-cover ring-2 ring-pink-200 transition group-hover:ring-pink-300"
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
-                <span class="w-24 h-24 md:w-[68px] md:h-[68px] rounded-full ${color} text-white text-base font-semibold place-items-center hidden">${initials}</span>
+                <span class="w-16 h-16 md:w-[68px] md:h-[68px] rounded-full ${color} text-white text-base font-semibold place-items-center hidden">${init}</span>
               </span>
               <div class="min-w-0">
                 <div class="text-slate-900 font-semibold group-hover:text-pink-700 transition">${sp.name||""}</div>
@@ -189,51 +126,91 @@ function speakerItem(sp, i, idx){
               </div>
             </div>
           </a>
-        </li>`;
+        </li>
+      `;
     }
 
-    // 2) Time chip (ปุ่มเวลา)
-    function timeChip(time, theme){
-      const t = theme
-        ? `border-${theme}-mid bg-${theme}-light text-${theme}-strong`
-        : `border-pink-200 bg-pink-50 text-pink-700`;
-      return `<div class="inline-flex items-center gap-2 rounded-full border ${t} px-3 py-1">${ClockIcon}<span class="font-semibold">${time||''}</span></div>`;
-    }
+    /* ====== Helpers for cards ====== */
+/* 1) ตรวจว่าเป็นการ์ดประเภทพักไหม (ใช้ชื่อเดิม isGraySession เพื่อลดจุดแก้) */
+function isGraySession(s){
+  const t=(s?.title||'').toLowerCase().trim();
+  return t==='break'
+      || t.startsWith('break & poster presentation networking')
+      || t.startsWith('lunch'); // Lunch (International Buffet)
+}
 
-    // 3) การ์ด: All-hands (Grand Ballroom) — padding เท่ากับ Symposium
-    function sessionCardAll(s, idx){
-      const speakers=(s.speakers||[]).map((sp,i)=>speakerItem(sp,i,idx)).join("");
-      return `
-        <article class="bg-white rounded-2xl shadow-soft border border-pink-100 overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition">
-          <div class="p-4 md:p-6">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              ${timeChip(s.time)}
-              ${s.room? `<div class="text-sm text-slate-600"><span class="font-semibold">Room:</span> ${s.room}</div>`:''}
-            </div>
-            <h3 class="mt-3 text-lg md:text-xl font-semibold text-slate-900">${s.title}</h3>
-            ${s.chair? `<div class="mt-1 text-sm text-slate-600"><span class="font-semibold">Chair:</span> ${s.chair}</div>`:''}
-            ${s.topic? `<div class="mt-1 text-sm text-slate-600"><span class="font-semibold">Topic:</span> ${s.topic}</div>`:''}
-            ${speakers? `<div class="mt-4"><div class="text-sm font-semibold text-slate-700 mb-2">Speaker:</div><ul class="space-y-2">${speakers}</ul></div>`:''}
-          </div>
-        </article>`;
-    }
+/* 2) ป้ายเวลา — เพิ่มธีม red แทน gray */
+function timeChip(time, theme){
+  let cls='border-pink-200 bg-pink-50 text-pink-700';
+  if(theme==='red') cls='border-red-300 bg-red-50 text-red-700';
+  else if(theme==='s1') cls='border-s1-mid bg-s1-light text-s1-strong';
+  else if(theme==='s2') cls='border-s2-mid bg-s2-light text-s2-strong';
+  else if(theme==='s3') cls='border-s3-mid bg-s3-light text-s3-strong';
+  return `<div class="inline-flex items-center gap-2 rounded-full border ${cls} px-3 py-1">
+            ${ClockIcon}<span class="font-semibold">${time||''}</span>
+          </div>`;
+}
 
-    // 4) การ์ด: Symposium — มุมขวาบนแสดง Chairman (แทน Room)
-    function sessionCardSymp(s, idx, theme){
-      const speakers=(s.speakers||[]).map((sp,i)=>speakerItem(sp,i,idx)).join("");
-      return `
-        <article class="rounded-2xl shadow-soft border border-${theme}-mid overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition bg-${theme}-light">
-          <div class="p-4 md:p-6">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              ${timeChip(s.time, theme)}
-              ${s.chair? `<div class="text-sm text-${theme}-strong"><span class="font-semibold">Chairman:</span> ${s.chair}</div>`:''}
-            </div>
-            <h3 class="mt-3 text-lg md:text-xl font-semibold text-${theme}-strong">${s.title}</h3>
-            ${s.topic? `<div class="mt-1 text-sm text-${theme}-strong/90"><span class="font-semibold">Topic:</span> ${s.topic}</div>`:''}
-            ${speakers? `<div class="mt-4"><div class="text-sm font-semibold text-${theme}-strong mb-2">Speaker:</div><ul class="space-y-2">${speakers}</ul></div>`:''}
-          </div>
-        </article>`;
-    }
+/* 3) การ์ด All-hands — มุมขวาบนเป็น Chairman และการ์ดพัก = แดง */
+function sessionCardAll(s, idx){
+  const isRest = isGraySession(s);
+  const speakers=(s.speakers||[]).map((sp,i)=>speakerItem(sp,i,idx)).join('');
+  const right = s.chair
+    ? `<div class="text-sm text-slate-700"><span class="font-semibold">Chairman:</span> ${s.chair}</div>`
+    : (s.room? `<div class="text-sm text-slate-700"><span class="font-semibold">Room:</span> ${s.room}</div>`:'');
+  const cardCls = isRest
+    ? 'rounded-2xl shadow-soft border border-red-200 bg-red-50'
+    : 'bg-white rounded-2xl shadow-soft border border-pink-100';
+
+  return `
+    <article class="${cardCls} overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition">
+      <div class="p-4 md:p-6">
+        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+          ${timeChip(s.time, isRest ? 'red' : null)}
+          ${right}
+        </div>
+        <h3 class="mt-3 text-lg md:text-xl font-semibold text-slate-900">${s.title}</h3>
+        ${s.topic? `<div class="mt-1 text-sm text-slate-600"><span class="font-semibold">Topic:</span> ${s.topic}</div>`:''}
+        ${speakers? `<div class="mt-4"><div class="text-sm font-semibold text-slate-700 mb-2">Speaker:</div><ul class="space-y-2">${speakers}</ul></div>`:''}
+      </div>
+    </article>`;
+}
+
+/* 4) การ์ด Symposium — ปกติใช้สีห้อง, แต่ถ้าเป็นการ์ดพัก = แดง */
+function sessionCardSymp(s, idx, theme){
+  const isRest = isGraySession(s); // ยังใช้ตัวตรวจเดิม (ตอนนี้เราใช้ธีม red กับช่วงพัก)
+  const t = (s?.title || '').toLowerCase().trim();
+  // เงื่อนไข "ไม่โชว์ chairman" เฉพาะ Break และ Break & Poster...
+  const noChair = isRest && (t === 'break' || t.startsWith('break & poster presentation networking'));
+
+  const speakers = (s.speakers||[]).map((sp,i)=>speakerItem(sp,i,idx)).join('');
+  const cardCls = isRest
+    ? 'rounded-2xl shadow-soft border border-red-200 bg-red-50'
+    : `rounded-2xl shadow-soft border border-${theme}-mid bg-${theme}-light`;
+
+  const right = (noChair || !s.chair)
+    ? ''
+    : `<div class="text-sm ${isRest ? 'text-slate-700' : `text-${theme}-strong`}">
+         <span class="font-semibold">Chairman:</span> ${s.chair}
+       </div>`;
+
+  const titleCls = isRest ? 'text-slate-800' : `text-${theme}-strong`;
+  const topicCls = isRest ? 'text-slate-700' : `text-${theme}-strong/90`;
+
+  return `
+    <article class="${cardCls} overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition">
+      <div class="p-4 md:p-6">
+        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+          ${timeChip(s.time, isRest ? 'red' : theme)}
+          ${right}
+        </div>
+        <h3 class="mt-3 text-lg md:text-xl font-semibold ${titleCls}">${s.title}</h3>
+        ${s.topic? `<div class="mt-1 text-sm ${topicCls}"><span class="font-semibold">Topic:</span> ${s.topic}</div>`:''}
+        ${speakers? `<div class="mt-4"><div class="text-sm font-semibold ${titleCls} mb-2">Speaker:</div><ul class="space-y-2">${speakers}</ul></div>`:''}
+      </div>
+    </article>
+  `;
+}
 
     function phaseHeader(label,badge){
       return `
@@ -243,7 +220,7 @@ function speakerItem(sp, i, idx){
         </div>`;
     }
 
-    // 5) Breakout Tabs — ชื่อเต็ม + ห้อง, ไม่มี chairman ในแท็บ
+    /* Breakout tabs: ใช้ชื่อเต็ม + ห้อง (ไม่มี chairman บนแท็บ) */
     function breakoutTabs(phase){
       const order=['GB1','GB2','GB3'];
       const themes={GB1:'s1',GB2:'s2',GB3:'s3'};
@@ -267,15 +244,14 @@ function speakerItem(sp, i, idx){
       }).join('');
 
       return `
-        ${phaseHeader("Breakout — Symposium (partition 3 ห้องใน Grand Ballroom)", "Breakout")}
+        ${phaseHeader("Breakout — Symposium", "Breakout")}
         <div class="grid sm:grid-cols-3 gap-2">${tabs}</div>
         ${panels}`;
     }
 
-    /* ========= Render ========= */
+    /* ===== Render ===== */
     function renderDay(day){
       const wrap=$('#day-container'); wrap.innerHTML='';
-
       day.phases.forEach(ph=>{
         if(ph.type==='allhands'){
           wrap.insertAdjacentHTML('beforeend', phaseHeader(ph.label, ph.badge||'All attendees'));
@@ -311,15 +287,13 @@ function speakerItem(sp, i, idx){
     function renderById(id){ renderDay(DAYS.find(d=>d.id===id)); }
     $$('.day-tab').forEach(btn=>btn.addEventListener('click',()=>renderById(Number(btn.dataset.day))));
 
-    /* ========= Data (ล่าสุด) =========
-       หมายเหตุ: สามารถเติม photo ของ speaker เป็นลิงก์ Google Drive/ไฟล์ไอดีได้ในแต่ละ object
-    */
+    /* ===== Data (ใช้ไฟล์ภาพโลคอลใน ./images/) ===== */
     const DAYS=[
       {
         id:1,
         phases:[
           { type:'allhands', label:'Registration', badge:'Registration',
-            sessions:[ { time:'08:00 – 08:30', title:'Registration' } ] },
+            sessions:[ { time:'08:00 – 08:30', title:'Registration', room:'Grand Ballroom (front of the room)' } ] },
           { type:'allhands', label:'Opening — All attendees @ Grand Ballroom', badge:'Opening',
             sessions:[
               { time:'08:30 – 09:00', title:'Opening Ceremony', room:'Grand Ballroom',
@@ -330,16 +304,17 @@ function speakerItem(sp, i, idx){
               { time:'09:00 – 09:45', title:'Plenary Lecture I', room:'Grand Ballroom',
                 chair:'Assoc. Prof. Varin Titapiwattanakun',
                 topic:'My Multidisciplinary Journey: From Basic Pharmaceutical Sciences to Drug Discovery in Neuroscience Research',
-                speakers:[ { name:'PD Dr. rer. Nat. Chotima Böttcher', aff:'Charité & MDC Berlin, Germany', photo: 'images/Chotima_Boettcher.png'
-                 } ] },
+                speakers:[ { name:'PD Dr. rer. Nat. Chotima Böttcher', aff:'Charité & MDC Berlin, Germany', photo:'./images/Chotima_Boettcher.png?v=1' } ] },
               { time:'09:45 – 10:30', title:'Plenary Lecture II', room:'Grand Ballroom',
+                chair:'Assoc. Prof. Varin Titapiwattanakun', /* ใส่ชื่อ Chairman จริงได้เลย */
                 topic:'Translating 3D Printed Pharmaceuticals: From Hype to Real-world Clinical Applications',
                 speakers:[ { name:'Prof. Abdul Basit', aff:'University College London (UCL), UK' } ] },
               { time:'10:30 – 10:45', title:'Break' },
               { time:'10:45 – 11:30', title:'Plenary Lecture III', room:'Grand Ballroom',
+                chair:'Assoc. Prof. Varin Titapiwattanakun',
                 topic:'From Injection to Transformation: Measuring Biomolecular Changes in Complex Injectables',
                 speakers:[ { name:'Assoc. Prof. Matthias G. Wacker', aff:'National University of Singapore (NUS), Singapore' } ] },
-              { time:'11:30 – 12:00', title:'Industrial Talk: BASF Special Talk', room:'Grand Ballroom', topic:'Biologics and Manufacture Process' },
+              { time:'11:30 – 12:00', title:'Industrial Talk: BASF Special Talk', room:'Grand Ballroom', chair:'Assoc. Prof. Varin Titapiwattanakun', topic:'Biologics and Manufacture Process' },
               { time:'12:00 – 13:00', title:'Lunch (International Buffet)' },
               { time:'13:00 – 13:45', title:'Poster presentation / Exhibition' }
             ] },
@@ -385,8 +360,8 @@ function speakerItem(sp, i, idx){
       {
         id:2,
         phases:[
-          { type:'allhands', label:'Registration (เช้าแบ่ง 3 ห้องด้วย partition)', badge:'Registration',
-            sessions:[ { time:'08:30 – 09:00', title:'Registration', room:'Grand Ballroom (Foyer)' } ] },
+          { type:'allhands', label:'Registration', badge:'Registration',
+            sessions:[ { time:'08:30 – 09:00', title:'Registration', room:'Grand Ballroom (front of the room)' } ] },
           { type:'breakout',
             rooms:[
               { id:'GB1', nameShort:'Symposium I',  nameFull:'Symposium I — Pharmaceutical Chemistry & Natural Products (Grand Ballroom I)', chair:{ name:'Asst. Prof. Rossarin Tansawat' } },
@@ -431,12 +406,12 @@ function speakerItem(sp, i, idx){
               { time:'13:00 – 13:45', title:'Plenary Lecture IV', room:'Grand Ballroom', chair:'Assoc. Prof. Suthira Taychakhoonavudh',
                 topic:'Medicines Security and Bioprocessing: A Future Agenda for Pharmaceutical Research',
                 speakers:[ { name:'Prof. Emeritus Geoffrey A. Cordel', aff:'USA' } ] },
-              { time:'13:45 – 14:15', title:'Plenary Lecture V', room:'Grand Ballroom',
+              { time:'13:45 – 14:15', title:'Plenary Lecture V', room:'Grand Ballroom', chair:'Assoc. Prof. Suthira Taychakhoonavudh',
                 topic:'From Evidence to Impact: How Health Technology Assessment Is Supporting Healthcare in Thailand and Beyond',
                 speakers:[ { name:'Assoc. Prof. Wanrudee Isaranuwatchai', aff:'University of Toronto, Canada' } ] },
-              { time:'14:15 – 14:30', title:'Break', room:'Grand Ballroom' },
-              { time:'14:30 – 16:30', title:'Nagai Award 2025 & Vichiara Jirawongse Award (Oral Presentations)', room:'Grand Ballroom' },
-              { time:'16:30', title:'Presentation Awards & Closing Ceremony', room:'Grand Ballroom' }
+              { time:'14:15 – 14:30', title:'Break' }, 
+              { time:'14:30 – 16:30', title:'Nagai Award 2025 & Vichiara Jirawongse Award (Oral Presentations)', room:'Grand Ballroom', chair:'Assoc. Prof. Suthira Taychakhoonavudh' }, 
+              { time:'16:30', title:'Presentation Awards & Closing Ceremony', room:'Grand Ballroom', chair:'Assoc. Prof. Suthira Taychakhoonavudh' }
             ] }
         ]
       }
