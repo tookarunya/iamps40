@@ -78,9 +78,9 @@ function speakerItem(sp, i, idx){
           <span class="relative inline-block shrink-0">
             <img src="${first}" data-fallback="${rest.join('|')}"
                  alt="${sp.name||''}" loading="lazy"
-                 class="w-16 h-16 md:w-[68px] md:h-[68px] rounded-full object-cover ring-2 ring-pink-200 transition group-hover:ring-pink-300"
+                 class="w-20 h-20 md:w-[68px] md:h-[68px] rounded-full object-cover ring-2 ring-pink-200 transition group-hover:ring-pink-300"
                  onerror="imgFallback(this)" />
-            <span class="w-16 h-16 md:w-[68px] md:h-[68px] rounded-full ${color} text-white text-base font-semibold place-items-center hidden">${initials}</span>
+            <span class="w-24 h-24 md:w-[68px] md:h-[68px] rounded-full ${color} text-white text-base font-semibold place-items-center hidden">${initials}</span>
           </span>
           <div class="min-w-0">
             <div class="text-slate-900 font-semibold group-hover:text-pink-700 transition">${sp.name||""}</div>
@@ -178,9 +178,9 @@ function speakerItem(sp, i, idx){
             <div class="flex items-center gap-4">  <!-- items-center = จัดกลางแนวตั้ง -->
               <span class="relative inline-block shrink-0">
                 <img src="${photo}" alt="${sp.name||''}" loading="lazy"
-                     class="w-16 h-16 md:w-[68px] md:h-[68px] rounded-full object-cover ring-2 ring-pink-200 transition group-hover:ring-pink-300"
+                     class="w-20 h-20 md:w-[68px] md:h-[68px] rounded-full object-cover ring-2 ring-pink-200 transition group-hover:ring-pink-300"
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
-                <span class="w-16 h-16 md:w-[68px] md:h-[68px] rounded-full ${color} text-white text-base font-semibold place-items-center hidden">${initials}</span>
+                <span class="w-24 h-24 md:w-[68px] md:h-[68px] rounded-full ${color} text-white text-base font-semibold place-items-center hidden">${initials}</span>
               </span>
               <div class="min-w-0">
                 <div class="text-slate-900 font-semibold group-hover:text-pink-700 transition">${sp.name||""}</div>
