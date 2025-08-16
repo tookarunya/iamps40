@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>IAMPS40 — Conference Agenda</title>
 
-  <!-- ฟอนต์อ่านสบาย -->
+  <!-- ฟอนต์ -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300..800&family=Noto+Sans+Thai:wght@300..800&display=swap" rel="stylesheet">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    /* โทนสี: เฮดเดอร์ชมพูหวาน + สี Symposium ใกล้โปสเตอร์ */
+    /* โทนสี: เฮดเดอร์ชมพูอ่อน + สีโทนเดียวกับ Flyer */
     tailwind.config = {
       safelist: [
         'bg-s1-light','bg-s1-mid','bg-s1-strong','border-s1-mid','text-s1-strong',
@@ -40,7 +40,7 @@
   </style>
 </head>
 <body class="bg-pink-50/40 text-slate-800 font-sans">
-  <!-- พลุแตก ครั้งแรก -->
+  
   <canvas id="fx" class="fixed inset-0 pointer-events-none z-50" style="display:none"></canvas>
 
   <!-- HEADER -->
@@ -89,7 +89,7 @@
     const initialsOf = n => (n||'').trim().split(/\s+/).map(x=>x[0]||'').slice(0,2).join('').toUpperCase();
     const ClockIcon = `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.75a10.25 10.25 0 1 0 0 20.5 10.25 10.25 0 0 0 0-20.5Zm.75 5.5a.75.75 0 0 0-1.5 0v5.19c0 .2.08.39.22.53l3.36 3.36a.75.75 0 1 0 1.06-1.06l-3.14-3.14V7.25Z"/></svg>`;
 
-    /* พลุแตกโชว์ครั้งเดียว */
+    /* พลุแตก ต้อนรับเปิดหน้าเว็บ */
     (function fireworksOnce(){
       if(sessionStorage.getItem('fx_shown')) return; sessionStorage.setItem('fx_shown','1');
       const c=document.getElementById('fx'),x=c.getContext('2d'),R=devicePixelRatio||1;
@@ -103,7 +103,7 @@
         t++; if(t<220||P.length) requestAnimationFrame(loop); else c.style.display='none'; })();
     })();
 
-    /* ====== Speaker item (ไม่มี Google Drive แล้ว) ====== */
+    /* ====== Speaker item ====== */
     function speakerItem(sp,i,idx){
       const colorPool=["bg-pink-500","bg-rose-400","bg-fuchsia-400","bg-violet-400","bg-pink-400"];
       const color=colorPool[(idx+i)%colorPool.length];
