@@ -78,7 +78,7 @@
 
   <footer class="border-t bg-white">
     <div class="max-w-7xl mx-auto px-4 py-8 text-sm text-slate-500">
-      © 2025 IAMPS40 · Agenda
+      © 2025 IAMPS40 · Conference Agenda
     </div>
   </footer>
 
@@ -132,7 +132,7 @@
     }
 
     /* ====== Helpers for cards ====== */
-/* 1) ตรวจว่าเป็นการ์ดประเภทพักไหม (ใช้ชื่อเดิม isGraySession เพื่อลดจุดแก้) */
+/* 1) ตรวจว่าเป็นการ์ดพักทานอาหารมั้ย */
 function isGraySession(s){
   const t=(s?.title||'').toLowerCase().trim();
   return t==='break'
@@ -140,7 +140,7 @@ function isGraySession(s){
       || t.startsWith('lunch'); // Lunch (International Buffet)
 }
 
-/* 2) ป้ายเวลา — เพิ่มธีม red แทน gray */
+/* 2) ป้ายเวลา — ธีม red*/
 function timeChip(time, theme){
   let cls='border-pink-200 bg-pink-50 text-pink-700';
   if(theme==='red') cls='border-red-300 bg-red-50 text-red-700';
@@ -177,9 +177,9 @@ function sessionCardAll(s, idx){
     </article>`;
 }
 
-/* 4) การ์ด Symposium — ปกติใช้สีห้อง, แต่ถ้าเป็นการ์ดพัก = แดง */
+/* 4) การ์ด Symposium — ใช้สีห้อง แต่ถ้าเป็นการ์ดพักทานอาหาร = แดง */
 function sessionCardSymp(s, idx, theme){
-  const isRest = isGraySession(s); // ยังใช้ตัวตรวจเดิม (ตอนนี้เราใช้ธีม red กับช่วงพัก)
+  const isRest = isGraySession(s); // ใช้ธีม red กับช่วงพัก
   const t = (s?.title || '').toLowerCase().trim();
   // เงื่อนไข "ไม่โชว์ chairman" เฉพาะ Break และ Break & Poster...
   const noChair = isRest && (t === 'break' || t.startsWith('break & poster presentation networking'));
@@ -221,7 +221,7 @@ function sessionCardSymp(s, idx, theme){
         </div>`;
     }
 
-    /* Breakout tabs: ใช้ชื่อเต็ม + ห้อง (ไม่มี chairman บนแท็บ) */
+    /* Breakout tabs: ใช้ชื่อ Symposium I-III */
     function breakoutTabs(phase){
       const order=['GB1','GB2','GB3'];
       const themes={GB1:'s1',GB2:'s2',GB3:'s3'};
@@ -307,7 +307,7 @@ function sessionCardSymp(s, idx, theme){
                 topic:'My Multidisciplinary Journey: From Basic Pharmaceutical Sciences to Drug Discovery in Neuroscience Research',
                 speakers:[ { name:'PD Dr. rer. Nat. Chotima Böttcher', aff:'Charité & MDC Berlin, Germany', photo:'./images/Chotima_Boettcher.png?v=1' } ] },
               { time:'09:45 – 10:30', title:'Plenary Lecture II', room:'Grand Ballroom',
-                chair:'Assoc. Prof. Varin Titapiwattanakun', /* ใส่ชื่อ Chairman จริงได้เลย */
+                chair:'Assoc. Prof. Varin Titapiwattanakun', /* ใส่ชื่อ Chairman ได้เลย */
                 topic:'Translating 3D Printed Pharmaceuticals: From Hype to Real-world Clinical Applications',
                 speakers:[ { name:'Prof. Abdul Basit', aff:'University College London (UCL), UK' } ] },
               { time:'10:30 – 10:45', title:'Break' },
