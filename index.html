@@ -245,7 +245,7 @@ function sessionCardSymp(s, idx, theme){
       }).join('');
 
       return `
-        ${phaseHeader("Breakout — Symposium", "Breakout")}
+        ${phaseHeader("📌", "Breakout")}
         <div class="grid sm:grid-cols-3 gap-2">${tabs}</div>
         ${panels}`;
     }
@@ -295,7 +295,7 @@ function sessionCardSymp(s, idx, theme){
         phases:[
           { type:'allhands', label:'🎓', badge:'Registration',
             sessions:[ { time:'08:00 – 08:30', title:'Registration', room:'Grand Ballroom (front of the room)' } ] },
-          { type:'allhands', label:'🎓', badge:'Opening',
+          { type:'allhands', label:'🔔', badge:'Opening',
             sessions:[
               { time:'08:30 – 09:00', title:'Opening Ceremony', room:'Grand Ballroom',
                 speakers:[
