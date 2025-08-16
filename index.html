@@ -72,9 +72,9 @@
   </header>
 
   <!-- เนื้อหา -->
-  <main class="max-w-5xl mx-auto px-4 pt-8 md:pt-10 pb-20">
-    <section id="day-container"></section>
-  </main>
+  <main class="max-w-5xl mx-auto px-4 pt-4 md:pt-5 pb-20">
+  <section id="day-container"></section>
+</main>
 
   <footer class="border-t bg-white">
     <div class="max-w-7xl mx-auto px-4 py-8 text-sm text-slate-500">
@@ -215,12 +215,12 @@ function sessionCardSymp(s, idx, theme){
 }
 
     function phaseHeader(label,badge){
-      return `
-        <div class="flex items-center gap-2 mb-3 mt-6">
-          <span class="px-3 py-1 rounded-full bg-pink-500 text-white text-sm font-bold shadow-soft">${badge}</span>
-          <h2 class="text-xl md:text-2xl font-bold text-slate-900">${label}</h2>
-        </div>`;
-    }
+  return `
+    <div class="flex items-center gap-2 mb-3 mt-3">
+      <span class="px-3 py-1 rounded-full bg-pink-500 text-white text-sm font-bold shadow-soft">${badge}</span>
+      <h2 class="text-xl md:text-2xl font-bold text-slate-900">${label}</h2>
+    </div>`;
+}
 
     /* Breakout tabs: ใช้ชื่อ Symposium I-III */
     function breakoutTabs(phase){
@@ -251,26 +251,28 @@ function sessionCardSymp(s, idx, theme){
         ${panels}`;
     }
 
-// ปุ่มวัน: แยก active / inactive ชัดเจน
+// ปุ่มวัน: สไตล์เมื่อ active / inactive
 const DAY_ACTIVE   = 'bg-white text-pink-700 shadow-soft ring-2 ring-white/60';
 const DAY_INACTIVE = 'bg-white/10 text-white/90 border border-white/20';
 
 function renderDay(day){
-  const wrap = document.querySelector('#day-container'); 
+  const wrap = document.querySelector('#day-container');
   wrap.innerHTML = '';
 
   day.phases.forEach(ph=>{
     if(ph.type==='allhands'){
+      // หัวข้อเฟส
       wrap.insertAdjacentHTML('beforeend', phaseHeader(ph.label, ph.badge||'All attendees'));
+      // การ์ด Grand Ballroom: ใช้ตัวคั่น h-3 อย่างเดียว (ไม่มี space-y-3 เพื่อไม่ให้ซ้ำ)
       const html = ph.sessions.map((s,i)=>sessionCardAll(s,i)).join('<div class="h-3"></div>');
-      wrap.insertAdjacentHTML('beforeend', `<div class="space-y-3">${html}</div>`);
-    }else if(ph.type==='breakout'){
+      wrap.insertAdjacentHTML('beforeend', html);
+    } else if(ph.type==='breakout'){
       wrap.insertAdjacentHTML('beforeend', breakoutTabs(ph));
     }
   });
 
-  // Tabs (ห้องย่อย) — ไม่ต้อง auto scroll ลงไป panel
-  const tabs = [...wrap.querySelectorAll('.symp-tab')];
+  // Tabs (ห้องย่อย) — ไม่ auto-scroll
+  const tabs   = [...wrap.querySelectorAll('.symp-tab')];
   const panels = [...wrap.querySelectorAll('.symp-panel')];
   function openRoom(id){
     panels.forEach(p=>p.classList.add('hidden'));
@@ -281,7 +283,7 @@ function renderDay(day){
   tabs.forEach(b=>b.addEventListener('click',()=>openRoom(b.dataset.room)));
   if(tabs.length) openRoom('GB1');
 
-  // Day tabs — ทำให้ปุ่ม active เด่น
+  // Day tabs — ทำให้ปุ่ม active เด่นชัด
   document.querySelectorAll('.day-tab').forEach(b=>{
     const active = Number(b.dataset.day)===day.id;
     b.className = `day-tab rounded-lg px-4 py-3 font-semibold transition focus:outline-none ${active? DAY_ACTIVE : DAY_INACTIVE}`;
@@ -289,8 +291,8 @@ function renderDay(day){
     b.onclick = ()=>renderById(Number(b.dataset.day));
   });
 
-  // เลิก auto-scroll ทุกกรณี (หัวเพจไม่เลื่อนหนี)
-  wrap.style.scrollMarginTop='96px';
+  // ไม่ auto-scroll
+  wrap.style.scrollMarginTop='48px'; // เผื่อมีลิงก์ภายในในอนาคต
 }
     
     function renderById(id){ renderDay(DAYS.find(d=>d.id===id)); }
