@@ -104,32 +104,33 @@
     })();
 
     /* ====== Speaker item ====== */
-    function speakerItem(sp,i,idx){
-      const colorPool=["bg-pink-500","bg-rose-400","bg-fuchsia-400","bg-violet-400","bg-pink-400"];
-      const color=colorPool[(idx+i)%colorPool.length];
-      const src = sp.photo ? sp.photo : ''; // ระบุ './images/xxxxx.png' ใน data
-      const init = initialsOf(sp.name);
+    function speakerItem(sp, i, idx){
+  const initials = (sp.name||'').trim().split(/\s+/).map(x=>x[0]||'').slice(0,2).join('').toUpperCase();
+  const colorPool = ["bg-pink-500","bg-rose-400","bg-fuchsia-400","bg-violet-400","bg-pink-400"];
+  const color = colorPool[(idx+i)%colorPool.length];
+  const src = sp.photo ? sp.photo : '';
 
-      return `
-        <li>
-          <a href="#" class="group block px-4 md:px-5 py-2 rounded-xl transition hover:bg-pink-50 hover:shadow focus:bg-pink-50 focus:outline-none">
-            <div class="flex items-center gap-4">
-              <span class="relative inline-block shrink-0">
-                <img src="${src}" alt="${sp.name||''}" loading="lazy"
-                     class="w-16 h-16 md:w-[68px] md:h-[68px] rounded-full object-cover ring-2 ring-pink-200 transition group-hover:ring-pink-300"
-                     onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
-                <span class="w-16 h-16 md:w-[68px] md:h-[68px] rounded-full ${color} text-white text-base font-semibold place-items-center hidden">${init}</span>
-              </span>
-              <div class="min-w-0">
-                <div class="text-slate-900 font-semibold group-hover:text-pink-700 transition">${sp.name||""}</div>
-                ${sp.title? `<div class="text-sm text-slate-600">${sp.title}</div>`:''}
-                ${sp.aff?   `<div class="text-xs text-slate-500">${sp.aff}</div>`:''}
-              </div>
-            </div>
-          </a>
-        </li>
-      `;
-    }
+  return `
+    <li>
+      <!-- ทำเหมือน hover ตลอดเวลา: bg-pink-50 + shadow และ ring รูปเป็น 300 -->
+      <a href="#" class="group block px-4 md:px-5 py-2 rounded-xl bg-pink-50 shadow hover:bg-pink-50 focus:bg-pink-50 focus:outline-none">
+        <div class="flex items-center gap-4">
+          <span class="relative inline-block shrink-0">
+            <img src="${src}" alt="${sp.name||''}" loading="lazy"
+                 class="w-16 h-16 md:w-[68px] md:h-[68px] rounded-full object-cover ring-2 ring-pink-300" 
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
+            <span class="w-16 h-16 md:w-[68px] md:h-[68px] rounded-full ${color} text-white text-base font-semibold place-items-center hidden">${initials}</span>
+          </span>
+          <div class="min-w-0">
+            <div class="text-pink-700 font-semibold">${sp.name||""}</div>
+            ${sp.title? `<div class="text-sm text-slate-600">${sp.title}</div>`:''}
+            ${sp.aff?   `<div class="text-xs text-slate-500">${sp.aff}</div>`:''}
+          </div>
+        </div>
+      </a>
+    </li>
+  `;
+}
 
     /* ====== Helpers for cards ====== */
 /* 1) ตรวจว่าเป็นการ์ดพักทานอาหารมั้ย */
@@ -250,41 +251,48 @@ function sessionCardSymp(s, idx, theme){
         ${panels}`;
     }
 
-    /* ===== Render ===== */
-    function renderDay(day){
-      const wrap=$('#day-container'); wrap.innerHTML='';
-      day.phases.forEach(ph=>{
-        if(ph.type==='allhands'){
-          wrap.insertAdjacentHTML('beforeend', phaseHeader(ph.label, ph.badge||'All attendees'));
-          const html = ph.sessions.map((s,i)=>sessionCardAll(s,i)).join('<div class="h-3"></div>');
-          wrap.insertAdjacentHTML('beforeend', `<div class="space-y-3">${html}</div>`);
-        }else if(ph.type==='breakout'){
-          wrap.insertAdjacentHTML('beforeend', breakoutTabs(ph));
-        }
-      });
+// ปุ่มวัน: แยก active / inactive ชัดเจน
+const DAY_ACTIVE   = 'bg-white text-pink-700 shadow-soft ring-2 ring-white/60';
+const DAY_INACTIVE = 'bg-white/10 text-white/90 border border-white/20';
 
-      // Tabs
-      const tabs=$$('.symp-tab',wrap), panels=$$('.symp-panel',wrap);
-      function openRoom(id){
-        panels.forEach(p=>p.classList.add('hidden'));
-        $(`#panel-${id}`,wrap)?.classList.remove('hidden');
-        tabs.forEach(b=>b.style.opacity=(b.dataset.room===id?'1':'.78'));
-        $(`#panel-${id}`,wrap)?.scrollIntoView({behavior:'smooth',block:'start'});
-      }
-      tabs.forEach(b=>b.addEventListener('click',()=>openRoom(b.dataset.room)));
-      if(tabs.length) openRoom('GB1');
+function renderDay(day){
+  const wrap = document.querySelector('#day-container'); 
+  wrap.innerHTML = '';
 
-      // Day tabs
-      $$('.day-tab').forEach(b=>{
-        const active=Number(b.dataset.day)===day.id;
-        b.className=`day-tab rounded-lg px-4 py-3 font-semibold transition focus:outline-none ${active?'bg-white/25 text-white shadow-soft hover:bg-white/30':'bg-white/10 text-white/90 border border-white/20 hover:bg-white/20'}`;
-        b.setAttribute('aria-pressed',active?'true':'false');
-        b.onclick=()=>renderById(Number(b.dataset.day));
-      });
-
-      wrap.style.scrollMarginTop='96px';
-      window.scrollTo({top:0,behavior:'smooth'});
+  day.phases.forEach(ph=>{
+    if(ph.type==='allhands'){
+      wrap.insertAdjacentHTML('beforeend', phaseHeader(ph.label, ph.badge||'All attendees'));
+      const html = ph.sessions.map((s,i)=>sessionCardAll(s,i)).join('<div class="h-3"></div>');
+      wrap.insertAdjacentHTML('beforeend', `<div class="space-y-3">${html}</div>`);
+    }else if(ph.type==='breakout'){
+      wrap.insertAdjacentHTML('beforeend', breakoutTabs(ph));
     }
+  });
+
+  // Tabs (ห้องย่อย) — ไม่ต้อง auto scroll ลงไป panel
+  const tabs = [...wrap.querySelectorAll('.symp-tab')];
+  const panels = [...wrap.querySelectorAll('.symp-panel')];
+  function openRoom(id){
+    panels.forEach(p=>p.classList.add('hidden'));
+    const target = wrap.querySelector(`#panel-${id}`);
+    if (target) target.classList.remove('hidden');
+    tabs.forEach(b=>b.style.opacity=(b.dataset.room===id?'1':'.78'));
+  }
+  tabs.forEach(b=>b.addEventListener('click',()=>openRoom(b.dataset.room)));
+  if(tabs.length) openRoom('GB1');
+
+  // Day tabs — ทำให้ปุ่ม active เด่น
+  document.querySelectorAll('.day-tab').forEach(b=>{
+    const active = Number(b.dataset.day)===day.id;
+    b.className = `day-tab rounded-lg px-4 py-3 font-semibold transition focus:outline-none ${active? DAY_ACTIVE : DAY_INACTIVE}`;
+    b.setAttribute('aria-pressed', active ? 'true' : 'false');
+    b.onclick = ()=>renderById(Number(b.dataset.day));
+  });
+
+  // เลิก auto-scroll ทุกกรณี (หัวเพจไม่เลื่อนหนี)
+  wrap.style.scrollMarginTop='96px';
+}
+    
     function renderById(id){ renderDay(DAYS.find(d=>d.id===id)); }
     $$('.day-tab').forEach(btn=>btn.addEventListener('click',()=>renderById(Number(btn.dataset.day))));
 
