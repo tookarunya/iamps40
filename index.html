@@ -138,7 +138,7 @@ function speakerItem(sp, i, idx){
 
   <footer class="border-t bg-white">
     <div class="max-w-7xl mx-auto px-4 py-8 text-sm text-slate-500">
-      © 2025 IAMPS40 · Tailwind (Flyer Theme)
+      © 2025 IAMPS40 · THAILAND · All rights reserved.
     </div>
   </footer>
 
@@ -206,7 +206,7 @@ function speakerItem(sp, i, idx){
       return `
         <article class="bg-white rounded-2xl shadow-soft border border-pink-100 overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition">
           <div class="p-4 md:p-6">
-            <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               ${timeChip(s.time)}
               ${s.room? `<div class="text-sm text-slate-600"><span class="font-semibold">Room:</span> ${s.room}</div>`:''}
             </div>
@@ -224,7 +224,7 @@ function speakerItem(sp, i, idx){
       return `
         <article class="rounded-2xl shadow-soft border border-${theme}-mid overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition bg-${theme}-light">
           <div class="p-4 md:p-6">
-            <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               ${timeChip(s.time, theme)}
               ${s.chair? `<div class="text-sm text-${theme}-strong"><span class="font-semibold">Chairman:</span> ${s.chair}</div>`:''}
             </div>
@@ -330,7 +330,7 @@ function speakerItem(sp, i, idx){
               { time:'09:00 – 09:45', title:'Plenary Lecture I', room:'Grand Ballroom',
                 chair:'Assoc. Prof. Varin Titapiwattanakun',
                 topic:'My Multidisciplinary Journey: From Basic Pharmaceutical Sciences to Drug Discovery in Neuroscience Research',
-                speakers:[ { name:'PD Dr. rer. Nat. Chotima Böttcher', aff:'Charité & MDC Berlin, Germany', photo: 'https://drive.google.com/file/d/16RoSA1v_eJ3A_CZewK6t35wO0kv_JtFR/view?usp=drive_link'
+                speakers:[ { name:'PD Dr. rer. Nat. Chotima Böttcher', aff:'Charité & MDC Berlin, Germany', photo: 'images/Chotima_Boettcher.png'
                  } ] },
               { time:'09:45 – 10:30', title:'Plenary Lecture II', room:'Grand Ballroom',
                 topic:'Translating 3D Printed Pharmaceuticals: From Hype to Real-world Clinical Applications',
