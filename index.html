@@ -36,7 +36,62 @@
           boxShadow:{ soft:'0 8px 24px -12px rgba(100,16,60,.22)' }
         }
       }
-    };
+    }
+  
+  function driveURLVariants(input="") {
+  const id = extractDriveId(input);
+  if (!id) return [input]; // ถ้าไม่ใช่ Drive ให้คืนค่าเดิม (เป็น URL ตรง)
+  return [
+    `https://drive.google.com/uc?export=view&id=${id}`,          // ปกติ
+    `https://drive.google.com/thumbnail?id=${id}&sz=w512`,        // ทางสำรอง
+    // รูปแบบภาพเสิร์ฟโดย Googleusercontent (บางกรณีใช้ได้)
+    `https://drive.google.com/uc?export=download&id=${id}`
+  ];
+}
+
+// เรียกเมื่อโหลดภาพล้มเหลว: ลองตัวเลือกถัดไป
+function imgFallback(img) {
+  const list = (img.dataset.fallback || "").split("|").filter(Boolean);
+  if (list.length) {
+    img.src = list.shift();
+    img.dataset.fallback = list.join("|");
+  } else {
+    // สุดท้ายแล้ว: ซ่อนรูป โชว์ initials
+    img.style.display = "none";
+    if (img.nextElementSibling) img.nextElementSibling.style.display = "grid";
+  }
+}
+window.imgFallback = imgFallback; // ให้ onerror เรียกใช้ได้
+
+function speakerItem(sp, i, idx){
+  const initials = (sp.name||"")
+    .trim().split(/\s+/).map(x=>x[0]?.toUpperCase()||"").slice(0,2).join("");
+  const variants = driveURLVariants(sp.photo || "");
+  const [first, ...rest] = variants;
+  const colorPool = ["bg-pink-500","bg-rose-400","bg-fuchsia-400","bg-violet-400","bg-pink-400"];
+  const color = colorPool[(idx+i) % colorPool.length];
+
+  return `
+    <li>
+      <a href="#" class="group block px-4 md:px-5 py-2 rounded-xl transition hover:bg-pink-50 hover:shadow focus:bg-pink-50 focus:outline-none">
+        <div class="flex items-center gap-4"> <!-- items-center = จัดกลางแนวตั้ง -->
+          <span class="relative inline-block shrink-0">
+            <img src="${first}" data-fallback="${rest.join('|')}"
+                 alt="${sp.name||''}" loading="lazy"
+                 class="w-16 h-16 md:w-[68px] md:h-[68px] rounded-full object-cover ring-2 ring-pink-200 transition group-hover:ring-pink-300"
+                 onerror="imgFallback(this)" />
+            <span class="w-16 h-16 md:w-[68px] md:h-[68px] rounded-full ${color} text-white text-base font-semibold place-items-center hidden">${initials}</span>
+          </span>
+          <div class="min-w-0">
+            <div class="text-slate-900 font-semibold group-hover:text-pink-700 transition">${sp.name||""}</div>
+            ${sp.title ? `<div class="text-sm text-slate-600">${sp.title}</div>` : ``}
+            ${sp.aff   ? `<div class="text-xs text-slate-500">${sp.aff}</div>`   : ``}
+          </div>
+        </div>
+      </a>
+    </li>
+  `;
+};
   </script>
 
   <style>
@@ -275,7 +330,7 @@
               { time:'09:00 – 09:45', title:'Plenary Lecture I', room:'Grand Ballroom',
                 chair:'Assoc. Prof. Varin Titapiwattanakun',
                 topic:'My Multidisciplinary Journey: From Basic Pharmaceutical Sciences to Drug Discovery in Neuroscience Research',
-                speakers:[ { name:'PD Dr. rer. Nat. Chotima Böttcher', aff:'Charité & MDC Berlin, Germany', photo: '16RoSA1v_eJ3A_CZewK6t35wO0kv_JtFR'
+                speakers:[ { name:'PD Dr. rer. Nat. Chotima Böttcher', aff:'Charité & MDC Berlin, Germany', photo: 'https://drive.google.com/file/d/16RoSA1v_eJ3A_CZewK6t35wO0kv_JtFR/view?usp=drive_link'
                  } ] },
               { time:'09:45 – 10:30', title:'Plenary Lecture II', room:'Grand Ballroom',
                 topic:'Translating 3D Printed Pharmaceuticals: From Hype to Real-world Clinical Applications',
