@@ -245,7 +245,7 @@ function sessionCardSymp(s, idx, theme){
       }).join('');
 
       return `
-        ${phaseHeader("Symposium I - III", "Breakout")}
+        ${phaseHeader(" ", "Breakout")}
         <div class="grid sm:grid-cols-3 gap-2">${tabs}</div>
         ${panels}`;
     }
@@ -293,15 +293,17 @@ function sessionCardSymp(s, idx, theme){
       {
         id:1,
         phases:[
-          { type:'allhands', label:'Day 1 | 13 November 2025', badge:'Registration',
+          { type:'allhands', label:' ', badge:'Registration | Day 1',
             sessions:[ { time:'08:00 – 08:30', title:'Registration', room:'Grand Ballroom (front of the room)' } ] },
-          { type:'allhands', label:'Ceremony', badge:'Opening',
+          { type:'allhands', label:' ', badge:'Opening Ceremony',
             sessions:[
               { time:'08:30 – 09:00', title:'Opening Ceremony', room:'Grand Ballroom',
                 speakers:[
                   { name:"Assoc. Prof. Vorasit Vongsutilers, Ph.D.", title:"Introductory Remarks — Dean", aff:"Faculty of Pharmaceutical Sciences, Chulalongkorn University" },
                   { name:"Prof. Wilert Puriwat, D.Phil. (Oxon)", title:"Opening Speech — President", aff:"Chulalongkorn University" }
-                ] },
+                ] } ] },
+          { type:'allhands', label:' ', badge:'Plenary Session I',
+            sessions:[      
               { time:'09:00 – 09:45', title:'Plenary Lecture I', room:'Grand Ballroom',
                 chair:'Assoc. Prof. Varin Titapiwattanakun',
                 topic:'My Multidisciplinary Journey: From Basic Pharmaceutical Sciences to Drug Discovery in Neuroscience Research',
@@ -361,7 +363,7 @@ function sessionCardSymp(s, idx, theme){
       {
         id:2,
         phases:[
-          { type:'allhands', label:'Day 2 | 14 November 2025', badge:'Registration',
+          { type:'allhands', label:' ', badge:'Registration | Day 2',
             sessions:[ { time:'08:30 – 09:00', title:'Registration', room:'Grand Ballroom (front of the room)' } ] },
           { type:'breakout',
             rooms:[
@@ -373,7 +375,7 @@ function sessionCardSymp(s, idx, theme){
               { roomId:'GB1', time:'09:00 – 09:30', title:'Invited Lecture VII', topic:'Lead Optimization Challenges for Beyond Rule of Five Candidates: A PD-L1 Inhibitor Case Example',
                 speakers:[ { name:'Dr. Thomayant Prueksaritanont', aff:'CU4DR, Thailand' } ] },
               { roomId:'GB1', time:'09:30 – 09:45', title:'Flash Oral Presentation XIII' },
-              { roomId:'GB1', time:'09:45 – 10:30', title:'Flash Oral Presentation XIV' },
+              { roomId:'GB1', time:'09:45 – 10:00', title:'Flash Oral Presentation XIV' },
               { roomId:'GB1', time:'10:00 – 10:30', title:'Invited Lecture X', topic:'Advanced MS Workflows in Pharmaceutical and Biomedical Analyses: Structure, Safety, and Spatial Insights',
                 speakers:[ { name:'Dr. Patanachai Limpikirati & Dr. Jeerapat Doungchawee', aff:'Chulalongkorn University (CU), Thailand' } ] },
               { roomId:'GB1', time:'10:30 – 10:45', title:'Break' },
@@ -400,9 +402,9 @@ function sessionCardSymp(s, idx, theme){
               { roomId:'GB3', time:'10:45 – 11:30', title:'Invited Lecture XV', topic:'Pharmacokinetic Modeling Approaches for Optimizing Drug Dosing in Special Populations',
                 speakers:[ { name:'Assoc. Prof. Weerachai Chaijamorn', aff:'Chulalongkorn University (CU), Thailand' } ] },
             ] },
-          { type:'allhands', label:'Midday — Lunch & Poster (All attendees)', badge:'All attendees',
+          { type:'allhands', label:' ', badge:'Lunch & Exhibition',
             sessions:[ { time:'11:30 – 12:30', title:'Lunch (International Buffet)' }, { time:'12:30 – 13:00', title:'Poster presentation / Exhibition' } ] },
-          { type:'allhands', label:'Afternoon — Plenary Session II @ Grand Ballroom', badge:'Plenary',
+          { type:'allhands', label:' ', badge:'Plenary Session II',
             sessions:[
               { time:'13:00 – 13:45', title:'Plenary Lecture IV', room:'Grand Ballroom', chair:'Assoc. Prof. Suthira Taychakhoonavudh',
                 topic:'Medicines Security and Bioprocessing: A Future Agenda for Pharmaceutical Research',
