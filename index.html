@@ -59,17 +59,62 @@
 </a>
     </div>
 
-    <!-- HERO + Day Tabs -->
-    <div class="bg-gradient-to-br from-hero-from to-hero-to text-white">
-      <div class="max-w-7xl mx-auto px-4 py-10 text-center">
-        <h1 class="text-3xl md:text-5xl font-bold tracking-tight">Conference Agenda</h1>
-        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
-          <button data-day="1" class="day-tab rounded-lg px-4 py-3 bg-white/25 text-white font-semibold shadow-soft hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/60">Day 1 | 13 Nov 2025</button>
-          <button data-day="2" class="day-tab rounded-lg px-4 py-3 bg-white/10 text-white/90 border border-white/20 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/40">Day 2 | 14 Nov 2025</button>
-        </div>
-      </div>
+<!-- HERO -->
+<div id="hero" class="bg-gradient-to-br from-hero-from to-hero-to text-white">
+  <div class="relative max-w-7xl mx-auto px-4 pt-4 md:pt-5 pb-8 md:pb-9 text-center">
+    <h1 class="text-3xl md:text-5xl font-bold tracking-tight leading-tight">Conference Agenda</h1>
+
+    <!-- ปุ่ม Day 1 / Day 2 -->
+    <div class="mt-5 md:mt-6 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
+      <button data-day="1" class="day-tab rounded-lg px-4 py-3 font-semibold transition focus:outline-none">
+        Day 1 | 13 Nov 2025
+      </button>
+      <button data-day="2" class="day-tab rounded-lg px-4 py-3 font-semibold transition focus:outline-none">
+        Day 2 | 14 Nov 2025
+      </button>
     </div>
+
+    <!-- สถานที่: ข้อความล้วน (ไม่มีกล่อง) ติดก้น hero -->
+    <p class="absolute inset-x-4 md:inset-x-8 bottom-2 md:bottom-3 text-white/95 text-[10px] sm:text-xs md:text-sm font-semibold leading-tight">
+      Montien Hotel, Surawong, Bangkok
+    </p>
+  </div>
+</div>
+
   </header>
+
+  <!-- Back to Top button -->
+<button id="backToTop" type="button" aria-label="Back to top"
+  class="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 rounded-full bg-pink-500 text-white w-12 h-12 shadow-lg
+         flex items-center justify-center transition duration-200 ease-out opacity-0 pointer-events-none hover:bg-pink-600">
+  <!-- ไอคอนลูกศรขึ้น -->
+  <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M12 5.5a1 1 0 0 1 .7.29l6 6a1 1 0 1 1-1.4 1.42L13 8.8V18a1 1 0 1 1-2 0V8.8l-4.3 4.41A1 1 0 0 1 5.3 11.8l6-6a1 1 0 0 1 .7-.3Z"/>
+  </svg>
+</button>
+
+
+
+<script>
+// แสดง/ซ่อนปุ่มตามระยะเลื่อน และเลื่อนขึ้นบนสุดแบบนุ่มนวล
+(function(){
+  const btn = document.getElementById('backToTop');
+  function toggle(){
+    if (window.scrollY > 200) {
+      btn.classList.remove('opacity-0','pointer-events-none');
+    } else {
+      btn.classList.add('opacity-0','pointer-events-none');
+    }
+  }
+  window.addEventListener('scroll', toggle, {passive:true});
+  toggle();
+  btn.addEventListener('click', ()=>window.scrollTo({top:0, behavior:'smooth'}));
+})();
+</script>
+
+
+
+
 
   <!-- เนื้อหา -->
   <main class="max-w-5xl mx-auto px-4 pt-4 md:pt-5 pb-20">
@@ -77,10 +122,11 @@
 </main>
 
   <footer class="border-t bg-white">
-    <div class="max-w-7xl mx-auto px-4 py-8 text-sm text-slate-500">
-      © 2025 IAMPS40 · Conference Agenda
-    </div>
-  </footer>
+  <div class="max-w-7xl mx-auto px-4 py-6 text-sm text-slate-600 flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
+    <!-- <div class="font-medium">Chulalongkorn University</div> -->
+    <div class="text-slate-500">© 2025 IAMPS40 · Agenda</div>
+  </div>
+</footer>
 
   <script>
     /* ===== Utils ===== */
@@ -431,7 +477,8 @@ function renderDay(day){
     ];
 
     // Boot
-    renderById(1);
+    renderById(1)
   </script>
+
 </body>
 </html>
