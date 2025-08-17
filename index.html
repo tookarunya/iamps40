@@ -43,46 +43,58 @@
   
   <canvas id="fx" class="fixed inset-0 pointer-events-none z-50" style="display:none"></canvas>
 
-  <!-- HEADER -->
   <header class="bg-white/80 backdrop-blur border-b">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <img src="./images/chula-crest.svg?v=1" alt="Chulalongkorn University emblem"
-     class="h-10 w-10 rounded-lg object-contain bg-white p-1.5 ring-1 ring-pink-200" />
-        <div class="leading-tight">
-          <div class="font-semibold">40th International Annual Meeting in Pharmaceutical Sciences (IAMPS40)</div>
-          <div class="text-xs text-slate-500">Theme: “Advancing Pharmaceutical Sciences Through a Multidisciplinary Approach”</div>
+  <!-- TOP BAR: แถวเดียวเสมอ / ปุ่มอยู่ขวา -->
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <!-- โลโก้พระเกี้ยว -->
+      <img src="./images/chula-crest.svg?v=1" alt="Chulalongkorn University emblem"
+           class="h-10 w-10 rounded-lg object-contain bg-white p-1.5 ring-1 ring-pink-200" />
+      <div class="leading-tight">
+        <div class="font-semibold">
+          40th International Annual Meeting in Pharmaceutical Sciences (IAMPS40)
+        </div>
+        <div class="text-xs text-slate-500">
+          Theme: “Advancing Pharmaceutical Sciences Through a Multidisciplinary Approach”
         </div>
       </div>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdNfbr0I8yYMWz3EfEylyfVoeFgq9lR3i3qkCrVLQSbXwe-yA/viewform" target="_blank" rel="noopener noreferrer"
-   class="inline-flex items-center px-4 py-2 rounded-full bg-pink-500 text-white font-semibold hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-200 transition">
-  Register Now
-</a>
     </div>
 
-<!-- HERO -->
-<div id="hero" class="bg-gradient-to-br from-hero-from to-hero-to text-white">
-  <div class="relative max-w-7xl mx-auto px-4 pt-4 md:pt-5 pb-8 md:pb-9 text-center">
-    <h1 class="text-3xl md:text-5xl font-bold tracking-tight leading-tight">Conference Agenda</h1>
-
-    <!-- ปุ่ม Day 1 / Day 2 -->
-    <div class="mt-5 md:mt-6 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
-      <button data-day="1" class="day-tab rounded-lg px-4 py-3 font-semibold transition focus:outline-none">
-        Day 1 | 13 Nov 2025
-      </button>
-      <button data-day="2" class="day-tab rounded-lg px-4 py-3 font-semibold transition focus:outline-none">
-        Day 2 | 14 Nov 2025
-      </button>
-    </div>
-
-    <!-- สถานที่: ข้อความล้วน (ไม่มีกล่อง) ติดก้น hero -->
-    <p class="absolute inset-x-4 md:inset-x-8 bottom-2 md:bottom-3 text-white/95 text-[10px] sm:text-xs md:text-sm font-semibold leading-tight">
-      Montien Hotel, Surawong, Bangkok
-    </p>
+    <!-- ปุ่ม: ตัดคำได้ + ข้อความกลางเสมอ -->
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdNfbr0I8yYMWz3EfEylyfVoeFgq9lR3i3qkCrVLQSbXwe-yA/viewform" target="_blank" rel="noopener noreferrer"
+       class="inline-flex items-center justify-center text-center
+              px-4 py-2 md:px-5 md:py-2.5 rounded-full
+              bg-pink-500 text-white font-semibold hover:bg-pink-600
+              focus:outline-none focus:ring-2 focus:ring-pink-200 transition
+              text-sm md:text-base leading-snug break-words">
+      Register Now
+    </a>
   </div>
-</div>
+  <!-- END: top bar -->
 
-  </header>
+  <!-- HERO: บล็อกแยกต่างหาก (จะไม่ไปนั่งข้างปุ่ม) -->
+  <div id="hero" class="bg-gradient-to-br from-hero-from to-hero-to text-white">
+    <div class="relative max-w-7xl mx-auto px-4 pt-4 md:pt-5 pb-8 md:pb-9 text-center">
+      <h1 class="text-3xl md:text-5xl font-bold tracking-tight leading-tight">Conference Agenda</h1>
+
+      <!-- Day Tabs (เหมือนเดิม) -->
+      <div class="mt-5 md:mt-6 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
+        <button data-day="1" class="day-tab rounded-lg px-4 py-3 font-semibold transition focus:outline-none">
+          Day 1 | 13 Nov 2025
+        </button>
+        <button data-day="2" class="day-tab rounded-lg px-4 py-3 font-semibold transition focus:outline-none">
+          Day 2 | 14 Nov 2025
+        </button>
+      </div>
+
+      <!-- สถานที่: ข้อความล้วน ลอยชิดก้น hero (ไม่เพิ่มความสูง) -->
+      <p class="absolute inset-x-4 md:inset-x-8 bottom-2 md:bottom-3 text-white/95
+                text-[10px] sm:text-xs md:text-sm font-semibold leading-tight">
+        Montien Hotel, Surawong, Bangkok
+      </p>
+    </div>
+  </div>
+</header>
 
   <!-- Back to Top button -->
 <button id="backToTop" type="button" aria-label="Back to top"
