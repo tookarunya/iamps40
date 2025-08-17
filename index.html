@@ -214,23 +214,23 @@ function timeChip(time, theme){
 
 /* 3) การ์ด All-hands — มุมขวาบนเป็น Chairman และการ์ดพัก = แดง */
 function sessionCardAll(s, idx){
-  const isRest = isGraySession(s);
-  const speakers=(s.speakers||[]).map((sp,i)=>speakerItem(sp,i,idx)).join('');
+  const gray = isGraySession(s);
+  const speakers = (s.speakers||[]).map((sp,i)=>speakerItem(sp,i,idx)).join('');
   const right = s.chair
-    ? `<div class="text-sm text-slate-700"><span class="font-semibold">Chairman:</span> ${s.chair}</div>`
-    : (s.room? `<div class="text-sm text-slate-700"><span class="font-semibold">Room:</span> ${s.room}</div>`:'');
-  const cardCls = isRest
-    ? 'rounded-2xl shadow-soft border border-red-200 bg-red-50'
-    : 'bg-white rounded-2xl shadow-soft border border-pink-100';
+    ? `<div class="text-sm ${gray?'text-slate-700':'text-slate-600'}"><span class="font-semibold">Chairman:</span> ${s.chair}</div>`
+    : (s.room? `<div class="text-sm ${gray?'text-slate-700':'text-slate-600'}"><span class="font-semibold">Room:</span> ${s.room}</div>`:'');
+  const cardCls = gray ? 'rounded-2xl shadow-soft border border-red-200 bg-red-50'
+                       : 'bg-white rounded-2xl shadow-soft border border-pink-100';
 
   return `
     <article class="${cardCls} overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition">
       <div class="p-4 md:p-6">
         <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-          ${timeChip(s.time, isRest ? 'red' : null)}
+          ${timeChip(s.time, gray?'red':null)}
           ${right}
         </div>
-        <h3 class="mt-3 text-lg md:text-xl font-semibold text-slate-900">${s.title}</h3>
+        <!-- ปรับเป็น slate-700 -->
+        <h3 class="mt-3 text-lg md:text-xl font-semibold text-slate-700">${s.title}</h3>
         ${s.topic? `<div class="mt-1 text-sm text-slate-600"><span class="font-semibold">Topic:</span> ${s.topic}</div>`:''}
         ${speakers? `<div class="mt-4"><div class="text-sm font-semibold text-slate-700 mb-2">Speaker:</div><ul class="space-y-2">${speakers}</ul></div>`:''}
       </div>
@@ -277,7 +277,8 @@ function sessionCardSymp(s, idx, theme){
   return `
     <div class="flex items-center gap-2 mb-3 mt-3">
       <span class="px-3 py-1 rounded-full bg-pink-500 text-white text-sm font-bold shadow-soft">${badge}</span>
-      <h2 class="text-xl md:text-2xl font-bold text-slate-900">${label}</h2>
+      <!-- ปรับเป็น slate-700 -->
+      <h2 class="text-xl md:text-2xl font-bold text-slate-700">${label}</h2>
     </div>`;
 }
 
