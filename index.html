@@ -167,16 +167,22 @@
   const initials = (sp.name||'').trim().split(/\s+/).map(x=>x[0]||'').slice(0,2).join('').toUpperCase();
   const colorPool = ["bg-pink-500","bg-rose-400","bg-fuchsia-400","bg-violet-400","bg-pink-400"];
   const color = colorPool[(idx+i)%colorPool.length];
-  const src = sp.photo ? sp.photo : '';
+
+  // ถ้ามีไฟล์ PDF ให้ลิงก์ไป PDF; ถ้าไม่มี จะเป็นปุ่มเฉย ๆ (ไม่เด้งไปบนสุด)
+  const pdfUrl = sp.pdf ? sp.pdf : null;
+  // ถ้า sp.download === true -> ใส่ download attribute เพื่อดาวน์โหลดไฟล์
+  const linkAttrs = pdfUrl
+    ? `${sp.download ? 'download' : 'target="_blank" rel="noopener noreferrer"'} href="${pdfUrl}"`
+    : `href="javascript:void(0)" aria-disabled="true"`;
 
   return `
     <li>
-      <!-- ทำเหมือน hover ตลอดเวลา: bg-pink-50 + shadow และ ring รูปเป็น 300 -->
-      <a href="#" class="group block px-4 md:px-5 py-2 rounded-xl bg-pink-50 shadow hover:bg-pink-50 focus:bg-pink-50 focus:outline-none">
+      <a ${linkAttrs}
+         class="group block px-4 md:px-5 py-2 rounded-xl bg-pink-50 shadow focus:bg-pink-50 focus:outline-none">
         <div class="flex items-center gap-4">
           <span class="relative inline-block shrink-0">
-            <img src="${src}" alt="${sp.name||''}" loading="lazy"
-                 class="w-16 h-16 md:w-[68px] md:h-[68px] rounded-full object-cover ring-2 ring-pink-300" 
+            <img src="${sp.photo || ''}" alt="${sp.name||''}" loading="lazy"
+                 class="w-16 h-16 md:w-[68px] md:h-[68px] rounded-full object-cover ring-2 ring-pink-300"
                  onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
             <span class="w-16 h-16 md:w-[68px] md:h-[68px] rounded-full ${color} text-white text-base font-semibold place-items-center hidden">${initials}</span>
           </span>
@@ -370,7 +376,7 @@ function renderDay(day){
               { time:'08:30 – 09:00', title:'Opening Ceremony', room:'Grand Ballroom',
                 speakers:[
                   { name:"Prof. Wilert Puriwat, D.Phil. (Oxon)", title:"Opening Speech — President", aff:"Chulalongkorn University", photo:'./images/Wilert_Puriwat.png?v=1' },
-                  { name:"Assoc. Prof. Vorasit Vongsutilers, Ph.D.", title:"Introductory Remarks — Dean", aff:"Faculty of Pharmaceutical Sciences, Chulalongkorn University", photo:'./images/Vorasit_Vongsutilers.png?v=1' }
+                  { name:"Assoc. Prof. Vorasit Vongsutilers, Ph.D.", title:"Introductory Remarks — Dean", aff:"Faculty of Pharmaceutical Sciences, Chulalongkorn University", photo:'./images/Vorasit_Vongsutilers.png?v=1', pdf:'https://drive.google.com/file/d/1KG2swnNrqdL8FvSZ2HPkbaf5w5G9EGFx/preview' }
                 ] } ] },
           { type:'allhands', label:' ', badge:'Plenary Session I',
             sessions:[      
