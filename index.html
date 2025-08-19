@@ -167,21 +167,24 @@
   const initials = (sp.name||'').trim().split(/\s+/).map(x=>x[0]||'').slice(0,2).join('').toUpperCase();
   const colorPool = ["bg-pink-500","bg-rose-400","bg-fuchsia-400","bg-violet-400","bg-pink-400"];
   const color = colorPool[(idx+i)%colorPool.length];
+  const src = sp.photo || '';
 
-  // ถ้ามีไฟล์ PDF ให้ลิงก์ไป PDF; ถ้าไม่มี จะเป็นปุ่มเฉย ๆ (ไม่เด้งไปบนสุด)
-  const pdfUrl = sp.pdf ? sp.pdf : null;
-  // ถ้า sp.download === true -> ใส่ download attribute เพื่อดาวน์โหลดไฟล์
-  const linkAttrs = pdfUrl
-    ? `${sp.download ? 'download' : 'target="_blank" rel="noopener noreferrer"'} href="${pdfUrl}"`
-    : `href="javascript:void(0)" aria-disabled="true"`;
+  // ถ้าเป็นลิงก์ภายในเว็บ (เช่น ./pdfs/...), ใช้ตรง ๆ
+  // ถ้าเป็นลิงก์ภายนอก/Google Drive → ส่งผ่าน pdf-bridge.html เพื่อให้ LINE ยอมเปิด
+  let href = 'javascript:void(0)';
+  if (sp.pdf) {
+    const isExternal = /^https?:\/\//i.test(sp.pdf);
+    href = isExternal
+      ? `./pdf-bridge.html?u=${encodeURIComponent(sp.pdf)}${sp.download ? '&mode=download' : '&mode=preview'}`
+      : sp.pdf;
+  }
 
   return `
     <li>
-      <a ${linkAttrs}
-         class="group block px-4 md:px-5 py-2 rounded-xl bg-pink-50 shadow focus:bg-pink-50 focus:outline-none">
+      <a href="${href}" class="group block px-4 md:px-5 py-2 rounded-xl bg-pink-50 shadow focus:bg-pink-50 focus:outline-none">
         <div class="flex items-center gap-4">
           <span class="relative inline-block shrink-0">
-            <img src="${sp.photo || ''}" alt="${sp.name||''}" loading="lazy"
+            <img src="${src}" alt="${sp.name||''}" loading="lazy"
                  class="w-16 h-16 md:w-[68px] md:h-[68px] rounded-full object-cover ring-2 ring-pink-300"
                  onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
             <span class="w-16 h-16 md:w-[68px] md:h-[68px] rounded-full ${color} text-white text-base font-semibold place-items-center hidden">${initials}</span>
