@@ -221,27 +221,40 @@ function timeChip(time, theme){
           </div>`;
 }
 
-/* 3) การ์ด All-hands — มุมขวาบนเป็น Chairman และการ์ดพัก = แดง */
+/* 3) การ์ด All-hands — มุมขวาบนเป็น MC (แทน Chairman) และการ์ดพัก = แดง */
 function sessionCardAll(s, idx){
   const gray = isGraySession(s);
   const speakers = (s.speakers||[]).map((sp,i)=>speakerItem(sp,i,idx)).join('');
-  const right = s.chair
-    ? `<div class="text-sm ${gray?'text-slate-700':'text-slate-600'}"><span class="font-semibold">Chairman:</span> ${s.chair}</div>`
-    : (s.room? `<div class="text-sm ${gray?'text-slate-700':'text-slate-600'}"><span class="font-semibold">Room:</span> ${s.room}</div>`:'');
-  const cardCls = gray ? 'rounded-2xl shadow-soft border border-red-200 bg-red-50'
-                       : 'bg-white rounded-2xl shadow-soft border border-pink-100';
+  
+  // ✅ เปลี่ยนเป็น MC ถ้ามี s.mc
+  const rightLabel = s.mc ? 'MC' : 'Chairman';
+  const rightName = s.mc || s.chair;
+  
+  const right = rightName
+    ? `<div class="text-sm ${gray ? 'text-slate-700' : 'text-slate-600'}">
+         <span class="font-semibold">${rightLabel}:</span> ${rightName}
+       </div>`
+    : (s.room
+        ? `<div class="text-sm ${gray ? 'text-slate-700' : 'text-slate-600'}">
+             <span class="font-semibold">Room:</span> ${s.room}
+           </div>`
+        : ''
+      );
+
+  const cardCls = gray
+    ? 'rounded-2xl shadow-soft border border-red-200 bg-red-50'
+    : 'bg-white rounded-2xl shadow-soft border border-pink-100';
 
   return `
     <article class="${cardCls} overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition">
       <div class="p-4 md:p-6">
         <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-          ${timeChip(s.time, gray?'red':null)}
+          ${timeChip(s.time, gray ? 'red' : null)}
           ${right}
         </div>
-        <!-- ปรับเป็น slate-700 -->
         <h3 class="mt-3 text-lg md:text-xl font-semibold text-slate-700">${s.title}</h3>
-        ${s.topic? `<div class="mt-1 text-sm text-slate-600"><span class="font-semibold">Topic:</span> ${s.topic}</div>`:''}
-        ${speakers? `<div class="mt-4"><div class="text-sm font-semibold text-slate-700 mb-2">Speaker:</div><ul class="space-y-2">${speakers}</ul></div>`:''}
+        ${s.topic ? `<div class="mt-1 text-sm text-slate-600"><span class="font-semibold">Topic:</span> ${s.topic}</div>` : ''}
+        ${speakers ? `<div class="mt-4"><div class="text-sm font-semibold text-slate-700 mb-2">Speaker:</div><ul class="space-y-2">${speakers}</ul></div>` : ''}
       </div>
     </article>`;
 }
@@ -250,7 +263,6 @@ function sessionCardAll(s, idx){
 function sessionCardSymp(s, idx, theme){
   const isRest = isGraySession(s); // ใช้ธีม red กับช่วงพัก
   const t = (s?.title || '').toLowerCase().trim();
-  // เงื่อนไข "ไม่โชว์ chairman" เฉพาะ Break และ Break & Poster...
   const noChair = isRest && (t === 'break' || t.startsWith('break & poster presentation networking'));
 
   const speakers = (s.speakers||[]).map((sp,i)=>speakerItem(sp,i,idx)).join('');
@@ -258,14 +270,15 @@ function sessionCardSymp(s, idx, theme){
     ? 'rounded-2xl shadow-soft border border-red-200 bg-red-50'
     : `rounded-2xl shadow-soft border border-${theme}-mid bg-${theme}-light`;
 
-  const right = (noChair || !s.chair)
+  // ✅ รองรับ MC เช่นเดียวกัน
+  const label = s.mc ? 'MC' : 'Chairman';
+  const name = s.mc || s.chair;
+
+  const right = (noChair || !name)
     ? ''
     : `<div class="text-sm ${isRest ? 'text-slate-700' : `text-${theme}-strong`}">
-         <span class="font-semibold">Chairman:</span> ${s.chair}
+         <span class="font-semibold">${label}:</span> ${name}
        </div>`;
-
-  const titleCls = isRest ? 'text-slate-800' : `text-${theme}-strong`;
-  const topicCls = isRest ? 'text-slate-700' : `text-${theme}-strong/90`;
 
   return `
     <article class="${cardCls} overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition">
@@ -274,13 +287,13 @@ function sessionCardSymp(s, idx, theme){
           ${timeChip(s.time, isRest ? 'red' : theme)}
           ${right}
         </div>
-        <h3 class="mt-3 text-lg md:text-xl font-semibold ${titleCls}">${s.title}</h3>
-        ${s.topic? `<div class="mt-1 text-sm ${topicCls}"><span class="font-semibold">Topic:</span> ${s.topic}</div>`:''}
-        ${speakers? `<div class="mt-4"><div class="text-sm font-semibold ${titleCls} mb-2">Speaker:</div><ul class="space-y-2">${speakers}</ul></div>`:''}
+        <h3 class="mt-3 text-lg md:text-xl font-semibold text-slate-700">${s.title}</h3>
+        ${s.topic ? `<div class="mt-1 text-sm text-slate-600"><span class="font-semibold">Topic:</span> ${s.topic}</div>` : ''}
+        ${speakers ? `<div class="mt-4"><div class="text-sm font-semibold text-slate-700 mb-2">Speaker:</div><ul class="space-y-2">${speakers}</ul></div>` : ''}
       </div>
-    </article>
-  `;
+    </article>`;
 }
+
 
     function phaseHeader(label,badge){
   return `
@@ -385,19 +398,19 @@ function renderDay(day){
           { type:'allhands', label:' ', badge:'Plenary Session I',
             sessions:[      
               { time:'09:30 – 10:15', title:'Plenary Lecture I', room:'Grand Ballroom',
-                chair:'Assist. Prof. Nattika Nimmano / Dr. Chanthawat Patikorn',
+                chair:'Assist. Prof. Nattika Nimmano / <br>Dr. Chanthawat Patikorn',
                 topic:'My Multidisciplinary Journey: From Basic Pharmaceutical Sciences to Drug Discovery in Neuroscience Research',
                 speakers:[ { name:'PD Dr. rer. Nat. Chotima Böttcher', title:"Charite-Universitätsmedizin Berlin", aff:'The Max Delbrück Center of Molecular Medicine (MDC) Berlin, Germany', photo:'./images/Chotima_Boettcher.png?v=1' } ] },      
               { time:'10:15 – 11:00', title:'Plenary Lecture II', room:'Grand Ballroom',
-                chair:'Assist. Prof. Nattika Nimmano / Dr. Chanthawat Patikorn', /* ใส่ชื่อ Chairman ได้เลย */
+                chair:'Assist. Prof. Nattika Nimmano / <br>Dr. Chanthawat Patikorn', /* ใส่ชื่อ Chairman ได้เลย */
                 topic:'Translating 3D Printed Pharmaceuticals: From Hype to Real-world Clinical Applications',
                 speakers:[ { name:'Prof. Abdul Basit', aff:'University College London (UCL), London, UK', photo:'./images/Abdul_Basit.png?v=1' } ] },
               { time:'11:00 – 11:45', title:'Plenary Lecture III', room:'Grand Ballroom',
-                chair:'Assist. Prof. Nattika Nimmano / Dr. Chanthawat Patikorn',
+                chair:'Assist. Prof. Nattika Nimmano / <br>Dr. Chanthawat Patikorn',
                 topic:'From Injection to Transformation: Measuring Biomolecular Changes in Complex Injectables',
                 speakers:[ { name:'Assoc. Prof. Matthias G. Wacker', aff:'National University of Singapore (NUS), Singapore', photo:'./images/Matthias_Wacker.png?v=1' } ] },
               { time:'11:45 – 12:15', title:'Industrial Talk: BASF Special Talk', room:'Grand Ballroom',
-                chair:'Assist. Prof. Nattika Nimmano / Dr. Chanthawat Patikorn',
+                chair:'Assist. Prof. Nattika Nimmano / <br>Dr. Chanthawat Patikorn',
                 topic:'Biologics and Manufacture Process',
                 speakers:[ { name:'Umakanth Kanna', aff:'Head Of Regional Technical Services and Application Managment, Pharma solutions , Asia Pacific · BASF South East Asia Pte Ltd,Singapore', photo:'' } ] },
               { time:'12:15 – 13:15', title:'Lunch (International Buffet)' },
@@ -516,19 +529,19 @@ function renderDay(day){
                       { time:'12:30 – 13:00', title:'Poster presentation / Exhibition' } ] },
           { type:'allhands', label:' ', badge:'Plenary Session II',
             sessions:[
-              { time:'13:00 – 13:45', title:'Plenary Lecture IV', room:'Grand Ballroom', chair:'Dr. Krittikan Chanpaisaeng / Dr. Aphinan Hongprasit',
+              { time:'13:00 – 13:45', title:'Plenary Lecture IV', room:'Grand Ballroom', chair:'Dr. Krittikan Chanpaisaeng / <br>Dr. Aphinan Hongprasit',
                 topic:'Medicines Security and Bioprocessing: A Future Agenda for Pharmaceutical Research',
                 speakers:[ { name:'Prof. Emeritus Geoffrey A. Cordell', aff:'USA', photo:'./images/Emeritus_Geoffrey.png?v=1' } ] },
-              { time:'13:45 – 14:15', title:'Plenary Lecture V', room:'Grand Ballroom', chair:'Dr. Krittikan Chanpaisaeng / Dr. Aphinan Hongprasit',
+              { time:'13:45 – 14:15', title:'Plenary Lecture V', room:'Grand Ballroom', chair:'Dr. Krittikan Chanpaisaeng / <br>Dr. Aphinan Hongprasit',
                 topic:'From Evidence to Impact: How Health Technology Assessment Is Supporting Healthcare in Thailand and Beyond',
                 speakers:[ { name:'Assoc. Prof. Wanrudee Isaranuwatchai', aff:'Institute of Health Policy, Management and Evaluation, University of Toronto (U of T), Canada', photo:'./images/Wanrudee_Isaranuwatchai.png?v=1' } ] },
               { time:'14:15 – 14:30', title:'Break' }, 
-              { time:'14:30 – 15:00', title:'Award ceremony', room:'Grand Ballroom', chair:'Dr. Krittikan Chanpaisaeng / Dr. Aphinan Hongprasit',
+              { time:'14:30 – 15:00', title:'Award ceremony', room:'Grand Ballroom', chair:'Dr. Krittikan Chanpaisaeng / <br>Dr. Aphinan Hongprasit',
               topic:'</br>•	Nagai Award for Thai Researcher 2025 Ceremony </br>•	Vichiara Jirawongse Award for Graduate Research Excellence in Herbal Medicine 2025' },
-              { time:'15:00 – 16:30', title:'Oral Presentation by awardee', room:'Grand Ballroom', chair:'Dr. Krittikan Chanpaisaeng / Dr. Aphinan Hongprasit',
+              { time:'15:00 – 16:30', title:'Oral Presentation by awardee', room:'Grand Ballroom', chair:'Dr. Krittikan Chanpaisaeng / <br>Dr. Aphinan Hongprasit',
               topic:'</br>•	Nagai Award for Thai Researcher 2025 </br>•	Vichiara Jirawongse Award for Graduate Research Excellence in Herbal Medicine 2025 </br>•	Kyushu University Award </br>• Presentation Awards' },
               
-              { time:'16:30', title:'Closing Ceremony', room:'Grand Ballroom', chair:'Dr. Krittikan Chanpaisaeng / Dr. Aphinan Hongprasit' }
+              { time:'16:30', title:'Closing Ceremony', room:'Grand Ballroom', chair:'Dr. Krittikan Chanpaisaeng / <br>Dr. Aphinan Hongprasit' }
             ] }
         ]
       }
