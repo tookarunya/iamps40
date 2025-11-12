@@ -227,7 +227,7 @@ function sessionCardAll(s, idx){
   const speakers = (s.speakers||[]).map((sp,i)=>speakerItem(sp,i,idx)).join('');
   
   // ถ้ามี MC ให้ใช้ label เป็น MC, ถ้าไม่มี ให้ใช้ Chairman
-  const chairLabel = s.mc ? "MC:" : "Chairman:";
+  const chairLabel = s.mc ? "MC" : "Chairman";
   const chairValue = s.mc || s.chair || "";
 
   const right = chairValue
